@@ -8,7 +8,8 @@ export class FigureApiService {
 
     async getFiguresData() {
         try {
-            this.data = await axios.get(this.basePath);
+            const response = await axios.get(this.basePath);
+            this.data = response.data;
             return this.data;
         } catch (error) {
             console.error("Error while fetching figures data", error);
@@ -18,7 +19,7 @@ export class FigureApiService {
     async addFigureData(figureData) {
         try {
             const newFigureData = await axios.post(this.basePath, figureData);
-            this.data.push(newFigureData);
+            this.data.push(newFigureData.data);
             return newFigureData;
         } catch (error) {
             console.error("Error while adding figure data:", error);
@@ -33,7 +34,7 @@ export class FigureApiService {
             if (index !== -1) {
                 this.data[index] = updateFigureData;
                 return updateFigureData;
-            } else throw new Error("Could find figure on client side");
+            } else throw new Error("Couldn't find figure on client side");
         } catch (error) {
             console.error("Error while updating figure data:", error);
         }
@@ -44,10 +45,13 @@ export class FigureApiService {
             await axios.delete(`${this.basePath}/${figureId}`);
             const index = this.data.findIndex((item) => item.id === figureId);
 
+            console.log(this.data);
+            
+
             if (index !== -1) {
                 this.data.splice(index, 1);
                 return figureId;
-            } else throw new Error("Could remove figure on client side");
+            } else throw new Error("Couldn't remove figure on client side");
         } catch (error) {
             console.error("Error while removing figure data:", error);
         }

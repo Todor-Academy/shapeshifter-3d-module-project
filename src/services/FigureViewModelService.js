@@ -1,8 +1,8 @@
 import {Figure} from "../models/Figure";
 
-export class FigureViewModelSerice {
+export class FigureViewModelService {
     toViewModel (figureData) {
-        return new Figure(...figureData);
+        return new Figure(figureData.id, figureData.name, figureData.color, figureData.geometryType, figureData.size);
     }
 
     toSerializedData (figureViewModel) {

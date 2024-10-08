@@ -5,6 +5,8 @@ import { GeometryTypes } from '../models/GeometryTypes';
 export class Viewer {
     constructor (canvasId) {
         this.canvas = document.getElementById(canvasId);
+        console.log(this.canvas);
+        
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -12,13 +14,13 @@ export class Viewer {
         this.drawnFiguresUUIDs = [];
 
         this.init();
-        // this.animate();
+        this.animate();
     }
 
     init() {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x434343);
-        this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+        this.camera = new THREE.PerspectiveCamera(70, this.canvas.clientWidth / this.canvas.clientHeight, 1, 1000);
         this.camera.position.z = 20;
 
 
@@ -26,7 +28,7 @@ export class Viewer {
 
         this.renderer.setPixelRatio (window.devicePixelRatio);
 
-        this.renderer.setSize (window.innerWidth, window.innerHeight);
+        this.renderer.setSize (this.canvas.clientWidth, this.canvas.clientHeight);
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -35,7 +37,7 @@ export class Viewer {
         hemisphereLight.position.set(2.5, 10, 5);
         this.scene.add(hemisphereLight);
 
-        this.scene(new THREE.AmbientLight(0x404040));
+        this.scene.add(new THREE.AmbientLight(0x404040));
 
         window.addEventListener('resize', () => {
             this.onResizeWindow();
@@ -43,9 +45,9 @@ export class Viewer {
     }
 
     onResizeWindow() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
         this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
     }
 
 

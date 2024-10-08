@@ -1,11 +1,15 @@
+import './figure-list-item.css';
+
 export class FigureList {
-    constructor() {
+    constructor(onDeleteHandler) {
         this.figureList = document.createElement("div");
         this.figureList.classList.add("figure-list");
+        this.figureList.classList.add("sidebar");
         this.figureListItems = [];
+        this.onDeleteHandler = onDeleteHandler;
     }
 
-    createFigureListItem(figure, onDeleteHandler) {
+    createFigureListItem(figure) {
         const figureListItem = document.createElement("div");
         figureListItem.classList.add("figure-list-item");
         figureListItem.id = figure.id;
@@ -32,8 +36,7 @@ export class FigureList {
         deleteButtonElement.classList.add("delete-button");
         deleteButtonElement.innerText = "x";
         deleteButtonElement.addEventListener("click", () => {
-            onDeleteHandler(figure.id);
-            // update list
+            this.onDeleteHandler(figure.id);
         });
 
         figureListItem.append(figureNameElement, metaInfoElement, deleteButtonElement);
@@ -43,9 +46,10 @@ export class FigureList {
 
     updateList(figures) {
         this.figureListItems = [];
-        fugures.forEach(figure => {
+        this.figureList.innerHTML = "";
+
+        figures.forEach(figure => {
             const figureItem = this.createFigureListItem(figure);
-            this.figureList.innerHTML = "";
             this.figureList.appendChild(figureItem);
             this.figureListItems.push(figureItem);
         });

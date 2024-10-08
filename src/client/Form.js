@@ -3,6 +3,7 @@ import { GeometryTypes } from "../models/GeometryTypes";
 export class Form {
     constructor () {
         this.form = document.createElement("form");
+        this.form.classList.add("sidebar");
 
         // name input form field
         const nameInput = document.createElement("input");
@@ -10,7 +11,7 @@ export class Form {
         nameInput.placeholder = "Назва фігури";
         nameInput.name = "figureName";
         nameInput.id = "figureName";
-        this.form.appendChild(this.createFormField("Назва фігури:", inputElement));
+        this.form.appendChild(this.createFormField("Назва фігури:", nameInput));
 
         // geometryType select form field
         const geometrySelect = document.createElement("select");
@@ -79,10 +80,10 @@ export class Form {
 
             const [name, geometryType, size, color] = this.form;
 
-            if (this.from[0].value !== "") {
+            if (this.form[0].value !== "") {
                 onFigureCreateCallback({
                     name: name.value,
-                    geometryType: geometryType.value,
+                    geometryType: GeometryTypes[geometryType.value],
                     size: size.value,
                     color: color.value,
                 });

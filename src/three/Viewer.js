@@ -5,8 +5,6 @@ import { GeometryTypes } from '../models/GeometryTypes';
 export class Viewer {
     constructor (canvasId) {
         this.canvas = document.getElementById(canvasId);
-        console.log(this.canvas);
-        
         this.scene = null;
         this.camera = null;
         this.renderer = null;

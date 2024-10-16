@@ -1,34 +1,53 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import { GeometryTypes } from '../models/GeometryTypes';
+// import { GeometryTypes } from '../models/GeometryTypes';
+
+enum GeometryTypes {
+    BOX = "BoxGeometry",
+    SPHERE = "SphereGeometry",
+    CYLINDER = "CylinderGeometry"
+}
+
+interface Figure {
+    id: string;
+    name: string;
+    geometryType: GeometryTypes,
+    size: number;
+    color: string;
+}
 
 export class Viewer {
-    constructor (canvasId) {
-        this.canvas = document.getElementById(canvasId);
-        this.scene = null;
-        this.camera = null;
-        this.renderer = null;
-        this.controls = null;
+    private canvas: HTMLCanvasElement;
+    private scene: THREE.Scene;
+    private camera: THREE.PerspectiveCamera;
+    private renderer: THREE.WebGLRenderer;
+    private controls: OrbitControls;
+    private drawnFiguresUUIDs: string[];
+
+
+    constructor (canvasId: string) {
+        this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(70, this.canvas.clientWidth / this.canvas.clientHeight, 1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.drawnFiguresUUIDs = [];
 
-        this.init();
-        this.animate();
+        if(this.canvas) {
+            this.init();
+            this.animate();
+        }
     }
 
     init() {
-        this.scene = new THREE.Scene();
+        
         this.scene.background = new THREE.Color(0x434343);
-        this.camera = new THREE.PerspectiveCamera(70, this.canvas.clientWidth / this.canvas.clientHeight, 1, 1000);
         this.camera.position.z = 20;
 
 
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
-
+        
         this.renderer.setPixelRatio (window.devicePixelRatio);
-
         this.renderer.setSize (this.canvas.clientWidth, this.canvas.clientHeight);
-
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
 
         const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.7);
@@ -55,7 +74,7 @@ export class Viewer {
         this.controls.update();
     }
 
-    draw(figure) {
+    draw(figure: Figure) {
         let geometry;
 
         switch(figure.geometryType) {
@@ -78,7 +97,7 @@ export class Viewer {
         this.drawnFiguresUUIDs.push(figure.id);
     }
 
-    removeFigure(figureId) {
+    removeFigure(figureId: string) {
         const meshToRemove = this.scene.children.find(child => child.userData.meshID === figureId);
 
         if (meshToRemove) {
@@ -86,7 +105,7 @@ export class Viewer {
         }
     }
 
-    getRandomNumber(min, max){
+    getRandomNumber(min: number, max: number){
         return Math.random() * (max - min) + min;
     }
 }

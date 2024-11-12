@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { title } = require("process");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = (env, argv) => {
     const isDevelopment = argv.mode === "development";
@@ -46,7 +47,8 @@ module.exports = (env, argv) => {
                 templateParameters: {
                     title: "Shapeshifter 3D Module Project"
                 },
-            })
+            }),
+            new BundleAnalyzerPlugin()
         ]
     }
 };

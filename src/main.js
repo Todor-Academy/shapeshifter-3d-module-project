@@ -3,5 +3,3 @@ import './style.css';
 
 const app = new Core();
 app.start();
-
-console.log(a);
